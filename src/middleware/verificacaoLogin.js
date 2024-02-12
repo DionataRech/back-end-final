@@ -1,23 +1,28 @@
+import bcrypt from "bcrypt";
 import criarContas from "..";
 
-let contaLogada = [];
-
-function verificacaoLogin(req, res, next) {
+async function verificacaoLogin(req, res, next) {
   const data = req.body;
-
-  const loginIndex = criarContas.findIndex(
-    (conta) => conta.email === data.email && conta.senha === data.senha
-  );
-
-  if (loginIndex !== -1) {
-    req.userId = criarContas[loginIndex].id;
-    console.log("Login Realizado com Sucesso. UserID:", req.userId);
-    return res.status(200).send("Login Realizado com Sucesso");
-  } else {
-    console.log("Email ou Senha não encontrados. Data:", data);
+  const usuario = criarContas.find((conta) => conta.email === data.email);
+  console.log(usuario, "esse e o usuario da verificacao");
+  if (!usuario) {
+    console.log("Email não encontrado. Data:", data);
     return res
       .status(404)
-      .send("Email ou Senha não encontrados, por favor, tente novamente!!!");
+      .json("Email não encontrado, por favor, tente novamente!!!");
+  }
+
+  const senhaComparada = await bcrypt.compare(data.senha, usuario.senha);
+
+  if (senhaComparada) {
+    req.userId = usuario.id;
+    console.log("Login Realizado com Sucesso. UserID:", usuario.id);
+    next();
+  } else {
+    console.log("Senha incorreta. Data:", data);
+    return res
+      .status(404)
+      .json("Senha incorreta, por favor, tente novamente!!!");
   }
 }
 
