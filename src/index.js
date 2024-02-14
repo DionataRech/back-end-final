@@ -127,12 +127,8 @@ app.delete("/usuario/delete/:email", (req, res) => {
   );
   if (emailIndex != -1) {
     const contaRemovida = criarContas.splice(emailIndex, 1);
-    console.log('res.status(200).send(" Deletado com Sucesso")');
     return res.status(200).send(" Deletado com Sucesso");
   } else {
-    console.log(
-      'res.status(404).send("Email nao encontrado,tente novamente !!!")'
-    );
     return res.status(404).send("Email nao encontrado,tente novamente !!!");
   }
 });
