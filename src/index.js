@@ -92,7 +92,7 @@ app.get("/usuarios/:email", (req, res) => {
       .status(200)
       .json({ mensagem: "Seu email filtrado e", data: emailFiltrado });
   } else {
-    res.status(404).json({ mensagem: "Email não encontrado." });
+    res.status(404).json({ mensagem: "Email nao encontrado." });
   }
 });
 

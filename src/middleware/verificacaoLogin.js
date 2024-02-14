@@ -9,17 +9,16 @@ async function verificacaoLogin(req, res, next) {
   console.log("esse e o usuario da verificacao LOGIN", usuario);
 
   if (!usuario) {
-    console.log("Email não encontrado. Data:", data);
+    console.log("Email nao encontrado. Data:", data);
     return res
       .status(404)
-      .json("Email não encontrado, por favor, tente novamente!!!");
+      .json("Email nao encontrado, por favor, tente novamente!!!");
   }
 
   const senhaComparada = await bcrypt.compare(data.senha, usuario.senha);
 
   if (senhaComparada) {
-    req.userId = usuario.id;
-    console.log("Login Realizado com Sucesso. UserID:", usuario.id);
+    console.log("Login Realizado com Sucesso. UserID:");
     next();
   } else {
     console.log("Senha incorreta. Data:", data);

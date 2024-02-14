@@ -6,7 +6,6 @@ function verificacaoCriarContas(req, res, next) {
     res.status(409).send("Email ja cadastrado ! Use outro email.");
   } else {
     return next();
-    res.status(200).send("passou pela verificacao !");
   }
 }
 
