@@ -5,6 +5,8 @@ import verificacaoCriarContas from "./middleware/verificacaoCriarContas";
 import bcrypt from "bcrypt";
 export const port = 6666;
 const app = express();
+app.use(cors());
+
 app.use(express.json());
 
 app.listen(port, () => {
@@ -14,7 +16,6 @@ app.listen(port, () => {
 ////////////////// Criacao de contas ////////////////////
 
 const criarContas = [];
-
 export default criarContas;
 
 let contador = 1;
@@ -38,61 +39,34 @@ app.post("/usuarioLogin", verificacaoLogin, async (req, res) => {
   res.status(200).send("Login Bem Sucedido !!!");
 });
 
-////////////////-USUARIO-LOGADO-///////////////////////
-
-app.get("/usuarioLogado", verificacaoLogin, (req, res) => {
-  const userId = req.userId;
-
-  if (!userId) {
-    return res.status(401).json({
-      message: "Usuário não autenticado",
-    });
-  }
-
-  const usuario = criarContas.find((user) => user.id === userId);
-
-  if (!usuario) {
-    return res.status(404).json({
-      message: "Usuário não encontrado. Faça o login para obter informações.",
-    });
-  }
-
-  res.status(200).json({
-    mensagem: "O usuário que está atualmente logado",
-    data: {
-      id: usuario.id,
-      nome: usuario.nome,
-      email: usuario.email,
-    },
-  });
-});
-
 ///////////////////CRIAR-RECADOS/////////////////////////////
 
 const recadosDeUsuarios = [];
-
-app.post("/criarRecados", verificacaoLogin, (req, res) => {
+let contadorRecados = 1;
+app.post("/criarRecados/:email", (req, res) => {
   const data = req.body;
-
-  const userId = req.userId;
-
-  if (!userId) {
-    return res.status(401).send("Usuário não autenticado");
+  const emailFiltrado = req.params.email;
+  const emailIndex = criarContas.findIndex(
+    (conta) => conta.email === emailFiltrado
+  );
+  if (emailIndex != -1) {
+    recadosDeUsuarios.push({
+      email: emailFiltrado,
+      id: contadorRecados,
+      titulo: data.titulo,
+      descricao: data.descricao,
+    });
+    res
+      .status(200)
+      .json({ message: "Recado criado com sucesso!", data: recadosDeUsuarios });
+    contadorRecados++;
+  } else {
+    return res.status(404).send("Email nao encontrado!!");
   }
-
-  recadosDeUsuarios.push({
-    id: userId,
-    titulo: data.titulo,
-    descricao: data.descricao,
-  });
-
-  res
-    .status(200)
-    .json({ message: "Recado criado com sucesso!", data: recadosDeUsuarios });
 });
 ////////////////  LISTAR USUARIOS /////////////////////
 
-app.get("/usuariosListados", (req, res) => {
+app.get("/usuarios/Listados", (req, res) => {
   return res
     .status(200)
     .json({ message: "Usuarios listados :", data: criarContas });
@@ -119,5 +93,46 @@ app.get("/usuarios/:email", (req, res) => {
       .json({ mensagem: "Seu email filtrado e", data: emailFiltrado });
   } else {
     res.status(404).json({ mensagem: "Email não encontrado." });
+  }
+});
+
+///////////////// ATUALIZAR ////////////////////////
+
+app.put("/usuario/atualizar/:email", (req, res) => {
+  const emailFiltrado = req.params.email;
+  const data = req.body;
+  const emailIndex = criarContas.findIndex(
+    (conta) => conta.email === emailFiltrado
+  );
+  if (emailIndex != -1) {
+    const atualizarUsuario = criarContas[emailIndex];
+    atualizarUsuario.nome = data.nome;
+    atualizarUsuario.email = data.email;
+    return res
+      .status(201)
+      .json({ mensagem: "Usuario atualizado com sucesso ", data: data });
+  } else {
+    return res
+      .status(404)
+      .send("Email nao encontrado,por favor tente novamente !!!");
+  }
+});
+
+/////////////////// DELETAR- USUARIO /////////
+
+app.delete("/usuario/delete/:email", (req, res) => {
+  const emailFiltrado = req.params.email;
+  const emailIndex = criarContas.findIndex(
+    (conta) => conta.email === emailFiltrado
+  );
+  if (emailIndex != -1) {
+    const contaRemovida = criarContas.splice(emailIndex, 1);
+    console.log('res.status(200).send(" Deletado com Sucesso")');
+    return res.status(200).send(" Deletado com Sucesso");
+  } else {
+    console.log(
+      'res.status(404).send("Email nao encontrado,tente novamente !!!")'
+    );
+    return res.status(404).send("Email nao encontrado,tente novamente !!!");
   }
 });

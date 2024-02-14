@@ -3,8 +3,11 @@ import criarContas from "..";
 
 async function verificacaoLogin(req, res, next) {
   const data = req.body;
+
   const usuario = criarContas.find((conta) => conta.email === data.email);
-  console.log(usuario, "esse e o usuario da verificacao");
+
+  console.log("esse e o usuario da verificacao LOGIN", usuario);
+
   if (!usuario) {
     console.log("Email não encontrado. Data:", data);
     return res
