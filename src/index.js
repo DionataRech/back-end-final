@@ -3,14 +3,14 @@ import cors from "cors";
 import verificacaoLogin from "./middleware/verificacaoLogin";
 import verificacaoCriarContas from "./middleware/verificacaoCriarContas";
 import bcrypt from "bcrypt";
-export const port = 6666;
+export const port = 9999;
 const app = express();
 app.use(cors());
 
 app.use(express.json());
 
 app.listen(port, () => {
-  console.log("Servidor esta rodando na porta 6666 !!!");
+  console.log("Servidor esta rodando na porta 9999 !!!");
 });
 
 ////////////////// Criacao de contas ////////////////////
