@@ -16,10 +16,11 @@ npm ou yarn
 
 1. Clone o repositório
 2. Entre no diretório do projeto
-3. Instale as dependências
+3. Instale as dependências (yarn)
 4. Inicie o servidor
-5. yarn start
-6. 
+5. yarn dev
+
+   
 O servidor estará em execução em https://crud-de-recados.onrender.com
 
 📚 Uso
