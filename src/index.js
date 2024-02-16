@@ -21,7 +21,6 @@ export default criarContas;
 let contador = 1;
 app.post("/usuarios", verificacaoCriarContas, async (req, res) => {
   const data = req.body;
-  const senha = data.senha;
   const hashSenha = await bcrypt.hash(data.senha, 10);
   criarContas.push({
     id: contador,
@@ -35,7 +34,7 @@ app.post("/usuarios", verificacaoCriarContas, async (req, res) => {
 
 // //////////////// login ///////////////////////////////
 
-app.post("/usuario/login", verificacaoLogin, async (req, res) => {
+app.post("/usuario/login", verificacaoLogin, (req, res) => {
   res.status(200).send("Login Bem Sucedido !!!");
 });
 
@@ -66,7 +65,7 @@ app.post("/criarRecados/:email", (req, res) => {
 });
 ////////////////  LISTAR USUARIOS /////////////////////
 
-app.get("/usuarios/listados", (req, res) => {
+app.get("/usuarios", (req, res) => {
   return res
     .status(200)
     .json({ message: "Usuarios listados :", data: criarContas });
