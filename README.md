@@ -30,7 +30,7 @@ Aqui estão alguns exemplos de como usar esta API:
 
 Para obter todos os usuários:
 
-GET https://crud-de-recados.onrender.com/api/usuarios/listados
+GET https://crud-de-recados.onrender.com/api/usuarios
 
 Para obter informações de um usuário específico:
 
@@ -47,3 +47,15 @@ PUT https://crud-de-recados.onrender.com/api/usuario/atualizar/:email
 Para deletar um usuário:
 
 DELETE https://crud-de-recados.onrender.com/api/usuario/atualizar/:email
+
+Para Fazer login :
+
+https://crud-de-recados.onrender.com/usuario/login
+
+Para criar um Recado :
+
+https://crud-de-recados.onrender.com/criarRecados/:email
+
+Para Listar os Recados :
+
+http:/https://crud-de-recados.onrender.com/recados/:email
