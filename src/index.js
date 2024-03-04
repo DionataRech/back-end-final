@@ -42,6 +42,7 @@ app.post("/usuario/login", verificacaoLogin, (req, res) => {
 
 const recadosDeUsuarios = [];
 let contadorRecados = 1;
+
 app.post("/criarRecados/:email", (req, res) => {
   const data = req.body;
   const emailFiltrado = req.params.email;
@@ -74,9 +75,13 @@ app.get("/usuarios", (req, res) => {
 ////////////////  LISTAR RECADOS-DE-USUARIOS /////////////////////
 
 app.get("/recados/:email", (req, res) => {
+  const emailFiltrado = req.params.email;
+  const recadosDoUsuario = recadosDeUsuarios.filter(
+    (recado) => recado.email === emailFiltrado
+  );
   return res
     .status(200)
-    .json({ mensagem: "Recados de usuarios", data: recadosDeUsuarios });
+    .json({ mensagem: "Recados de usuários", data: recadosDoUsuario });
 });
 
 ////////////////  FILTRAR USUARIOS /////////////////////
