@@ -1,4 +1,4 @@
-import express from "express";
+import express, { query } from "express";
 import cors from "cors";
 import verificacaoLogin from "./middleware/verificacaoLogin";
 import verificacaoCriarContas from "./middleware/verificacaoCriarContas";
@@ -82,6 +82,36 @@ app.get("/recados/:email", (req, res) => {
   return res
     .status(200)
     .json({ mensagem: "Recados de usuários", data: recadosDoUsuario });
+});
+
+////////////////  LISTAR RECADOS-DE-USUARIOS (~PAGINACAO~)/////////////////////
+
+app.get("/recados", (req, res) => {
+  try {
+    if (recadosDeUsuarios.length === 0) {
+      return res.status(400).send({ mensagem: "A lista está vazia" });
+    }
+    const limit = parseInt(req.query.limit);
+    const offset = parseInt(req.query.offset);
+    const recadosPorPaginaPositivo = offset - 1;
+
+    const recadosPaginados = recadosDeUsuarios.slice(
+      recadosPorPaginaPositivo,
+      recadosPorPaginaPositivo + limit
+    );
+    console.log(limit, offset, "filtrinho amigo");
+    res.status(200).json({
+      success: true,
+      message: "Recados retornados com sucesso",
+      data: recadosPaginados,
+      totalRecados: recadosDeUsuarios.length,
+      paginaAtual: Math.floor(recadosPorPaginaPositivo / limit) + 1,
+      totalPaginas: Math.ceil(recadosDeUsuarios.length / limit),
+      quantidadePorPagina: limit,
+    });
+  } catch (error) {
+    res.status(500).send({ mensagem: "Erro interno" });
+  }
 });
 
 ////////////////  FILTRAR USUARIOS /////////////////////
