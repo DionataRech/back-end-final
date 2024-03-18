@@ -92,14 +92,14 @@ app.get("/recados", (req, res) => {
       return res.status(400).send({ mensagem: "A lista está vazia" });
     }
     const limit = parseInt(req.query.limit);
-    const offset = parseInt(req.query.offset);
-    const recadosPorPaginaPositivo = offset - 1;
+    const page = parseInt(req.query.page);
+    const recadosPorPaginaPositivo = (page - 1) * limit;
 
     const recadosPaginados = recadosDeUsuarios.slice(
       recadosPorPaginaPositivo,
       recadosPorPaginaPositivo + limit
     );
-    console.log(limit, offset, "filtrinho amigo");
+    console.log(limit, page, "filtrinho amigo");
     res.status(200).json({
       success: true,
       message: "Recados retornados com sucesso",
